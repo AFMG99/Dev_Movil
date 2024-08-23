@@ -1,47 +1,63 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    card: {
-        backgroundColor: '#F5F5DC',
-        borderRadius: 10,
-        padding: 20,
-        margin: 10,     
+    container: {
+        flex: 1,
+        backgroundColor: '#f3e5f5',
+    },
+    headerWave: {
+        height: 100,
+        backgroundColor: '#6a1b9a',
+        borderBottomLeftRadius: 50,
+        borderBottomRightRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    headerText: {
+        color: 'white',
+        fontSize: 24,
+        fontWeight: 'bold',
     },
     title: {
-        fontSize: 90,
-        color: '#000',
-        fontWeight: 'bold'
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#6a1b9a',
+        textAlign: 'center',
+        marginBottom: 10,
     },
     subtitle: {
-        fontSize: 15,
+        fontSize: 16,
+        color: '#7e57c2',
+        textAlign: 'center',
+        marginBottom: 20,
     },
     textInput: {
-        width: '75%',
-        padding: 10,
-        paddingStart: 30,
-        margin: 20,
-        height: 40,
-        marginTop: 20,
-        borderTopEndRadius: 20,
-        backgroundColor: '#fff',
-        color: 'gray'
+        marginBottom: 10,
+        backgroundColor: 'white',
     },
-    foto: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginRight: 10
+    errorText: {
+        color: 'red',
+        fontSize: 12,
+        marginBottom: 10,
     },
-    nombre: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5
-    },
-    login:{
-        flex: 1,
-        backgroundColor: 'plum',
+    button: {
+        backgroundColor: '#6a1b9a',
+        borderRadius: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        marginVertical: 8,
         alignItems: 'center',
-        justifyContent: 'center'
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    footerWave: {
+        height: 100,
+        backgroundColor: '#6a1b9a',
+        borderTopLeftRadius: 50,
+        borderTopRightRadius: 50,
     },
 });
 

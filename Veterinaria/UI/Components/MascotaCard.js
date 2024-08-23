@@ -1,6 +1,6 @@
 import React from "react";
 import {View, Text, Image, Button} from 'react-native'
-import styles from '../styles/globalStyles'
+import styles from '../../styles/globalStyles'
 
 const MascotaCard = ({mascota}) => {
     return(

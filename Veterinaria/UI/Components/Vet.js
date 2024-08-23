@@ -25,7 +25,7 @@ const mascotas = [
   }
 ];
 
-const Home = () => {
+const Vet = () => {
   return (
     <View>
       <Text>App Veterinaria</Text>
@@ -38,4 +38,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Vet;
