@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, Button, Text, Image } from 'react-native';
-import { List, IconButton } from 'react-native-paper';
+import { View, FlatList, Button, Text, Image, Pressable } from 'react-native';
 import { items as initialItems } from "./Components/database";
+import globalStyles from '../styles/globalStyles';
+import screenStyles from "../styles/screenStyles";
+import shoppingCartStyles from '../styles/shoppingCartStyles'
 
 const ShoppingCart = ({ navigation }) => {
     const [items, setItems] = useState(initialItems);
@@ -11,7 +13,7 @@ const ShoppingCart = ({ navigation }) => {
     };
 
     const increaseQuantity = (id) => {
-        setItems(items.map(item => item.id === id ? { ...item, quantity: Math.min(99,item.quantity + 1) } : item));
+        setItems(items.map(item => item.id === id ? { ...item, quantity: Math.min(99, item.quantity + 1) } : item));
     };
 
     const removeItem = (id) => {
@@ -23,43 +25,40 @@ const ShoppingCart = ({ navigation }) => {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.itemContainer}>
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <View style={styles.itemDetails}>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemDescription}>{item.description}</Text>
-                <Text style={styles.itemPrice}>${item.value} x {item.quantity}</Text>
-                <View style={styles.quantityContainer}>
-                    <IconButton 
-                        icon="minus" 
-                        onPress={() => decreaseQuantity(item.id)} 
-                        style={styles.quantityButton}
-                    />
-                    <Text style={styles.quantityText}>{item.quantity}</Text>
-                    <IconButton 
-                        icon="plus" 
-                        onPress={() => increaseQuantity(item.id)} 
-                        style={styles.quantityButton}
-                    />
+        <View style={shoppingCartStyles.itemContainer}>
+            <Image source={{ uri: item.image }} style={globalStyles.image} />
+            <View style={globalStyles.itemDetails}>
+                <Text style={globalStyles.itemName}>{item.name}</Text>
+                <Text style={shoppingCartStyles.itemDescription}>{item.description}</Text>
+                <Text style={globalStyles.itemPrice}>${item.value} x {item.quantity}</Text>
+                <View style={shoppingCartStyles.quantityContainer}>
+                    <Pressable onPress={() => decreaseQuantity(item.id)} style={shoppingCartStyles.quantityButton}>
+                        <Text style={globalStyles.emoji}>➖</Text>
+                    </Pressable>
+                    <Text style={shoppingCartStyles.quantityText}>{item.quantity}</Text>
+                    <Pressable onPress={() => increaseQuantity(item.id)} style={shoppingCartStyles.quantityButton}>
+                        <Text style={globalStyles.emoji}>➕</Text>
+                    </Pressable>
                 </View>
-                <IconButton 
-                    icon="delete" 
-                    onPress={() => removeItem(item.id)}
-                    style={styles.deleteButton}
-                />
+                <Pressable onPress={() => removeItem(item.id)} style={shoppingCartStyles.deleteButton}>
+                    <Text style={globalStyles.emoji}>🗑️</Text>
+                </Pressable>
             </View>
         </View>
     );
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.container}>
+            <View style={screenStyles.headerWave}>
+                <Text style={globalStyles.headerText}>Carrito de compras</Text>
+            </View>
             <FlatList
                 data={items}
                 renderItem={renderItem}
                 keyExtractor={item => item.id.toString()}
                 ListFooterComponent={
-                    <View style={styles.footer}>
-                        <Text style={styles.total}>Valor total: ${getTotalValue()}</Text>
+                    <View style={shoppingCartStyles.footer}>
+                        <Text style={shoppingCartStyles.total}>Valor total: ${getTotalValue()}</Text>
                         <Button 
                             onPress={() => navigation.navigate('PaymentBranch')}
                             title="Proceder al pago"
@@ -71,77 +70,5 @@ const ShoppingCart = ({ navigation }) => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#F3F1F5',
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 15,
-        elevation: 2,
-    },
-    image: {
-        width: 80,
-        height: 80,
-        borderRadius: 8,
-        backgroundColor: '#EDE7F6',
-    },
-    itemDetails: {
-        flex: 1,
-        marginLeft: 10,
-    },
-    itemName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#4A148C',
-    },
-    itemDescription: {
-        fontSize: 14,
-        color: '#757575',
-        marginVertical: 4,
-    },
-    itemPrice: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#7B1FA2',
-    },
-    quantityContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    quantityButton: {
-        backgroundColor: '#EDE7F6',
-    },
-    quantityText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginHorizontal: 10,
-        color: '#4A148C', 
-    },
-    deleteButton: {
-        alignSelf: 'flex-end',
-        marginTop: 5,
-    },
-    footer: {
-        padding: 16,
-        borderTopWidth: 1,
-        borderTopColor: '#ddd',
-        alignItems: 'center',
-    },
-    total: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#4A148C',
-        marginBottom: 10,
-    },
-});
 
 export default ShoppingCart;

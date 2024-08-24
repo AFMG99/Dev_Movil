@@ -5,7 +5,7 @@ import globalStyles from '../styles/globalStyles'
 import { validateUser } from './Components/userStorage';
 
 const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return passwordRegex.test(password);
 };
 
@@ -69,7 +69,7 @@ const Login = ({ navigation, onLogin }) => {
                     onChangeText={setPassword}
                     secureTextEntry
                     style={globalStyles.textInput}
-                {/*    maxLength={8}; la profesora no nos va a cobrar la validacion de max 8 caracteres en la contraseña*/}
+                /*  maxLength={8}; la profesora no nos va a cobrar la validacion de max 8 caracteres en la contraseña */ 
                     error={!!passwordError}
                 />
                 {!!passwordError && <Text style={globalStyles.errorText}>{passwordError}</Text>}

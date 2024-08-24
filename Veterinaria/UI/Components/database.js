@@ -1,27 +1,27 @@
 export const categories = [
     { 
         id: '1', 
-        name: 'Electronics', 
+        name: 'Tecnología', 
         image: 'https://flare.pk/wp-content/uploads/2023/01/1-1-650x353.jpg' 
     },
     { 
         id: '2', 
-        name: 'Fashion', 
+        name: 'Moda', 
         image: 'https://img.freepik.com/vector-gratis/ilustraciones-moda_23-2147492196.jpg' 
     },
     { 
         id: '3', 
-        name: 'Home & Kitchen', 
+        name: 'Hogar y cocina', 
         image: 'https://prolinerangehoods.com/cdn/shop/articles/whats-in-a-chefs-dream-home-kitchen-essential-elements-846719.jpg?v=1719132276' 
     },
     { 
         id: '4', 
-        name: 'Books', 
+        name: 'Libros', 
         image: 'https://transcode-v2.app.engoo.com/image/fetch/f_auto,c_lfill,w_300,dpr_3/https://assets.app.engoo.com/images/6runWm75P2cDHaU34pL0Io.jpeg' 
     },
     { 
         id: '5', 
-        name: 'Sports', 
+        name: 'Deportes', 
         image: 'https://pre-webunwto.s3.eu-west-1.amazonaws.com/2020-01/sport-congresse.jpg' 
     },
 ];
@@ -118,6 +118,14 @@ export const items = [
         }
     },
 ];
+
+export const user = {
+    id: '1',
+    firstName: 'Juan',
+    lastName: 'Pérez',
+    birthDate: '15/08/1985',
+    photo: 'https://example.com/photo.jpg',
+};
 
 export const favorites = items.map(item => ({
     ...item,

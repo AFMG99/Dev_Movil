@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native';
 import { List } from "react-native-paper";
 import { offers } from "./Components/database";
+import globalStyles from '../styles/globalStyles'
 
 const Offers = () => {
     const renderItem = ({item}) => (
@@ -13,7 +14,7 @@ const Offers = () => {
     );
 
     return(
-        <View style={styles.container}>
+        <View style={globalStyles.container}>
             <FlatList
                 data={offers}
                 renderItem={renderItem}

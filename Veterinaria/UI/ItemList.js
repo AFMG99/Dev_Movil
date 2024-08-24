@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
-import { Appbar, List, Searchbar, Text } from 'react-native-paper';
+import { View, FlatList, Pressable, TextInput, Text, Image, Button } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { items } from './Components/database';
+import globalStyles from '../styles/globalStyles';
+import itemListStyles from '../styles/itemListStyles';
+import screenStyles from '../styles/screenStyles';
 
 const ItemList = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,15 +25,17 @@ const ItemList = () => {
   }, [query, categoryId]);
 
   const renderItem = ({ item }) => (
-    <List.Item
-      title={item.name}
-      description={`${item.description} - $${item.value}`}
-      left={() => <List.Image style={styles.image} source={{ uri: item.image }} />}
+    <Pressable
       onPress={() => navigation.navigate('ItemDetails', { item })}
-      style={styles.listItem}
-      titleStyle={styles.itemTitle}
-      descriptionStyle={styles.itemDescription}
-    />
+      style={itemListStyles.listItem}
+    >
+      <Image style={itemListStyles.image} source={{ uri: item.image }} />
+      <View>
+        <Text style={itemListStyles.itemTitle}>{item.name}</Text>
+        <Text style={itemListStyles.itemDescription}>{`${item.description}`}</Text>
+        <Text style={itemListStyles.itemPrice}>{`$${item.value}`}</Text>
+      </View>
+    </Pressable>
   );
 
   const _handleSearch = () => {
@@ -40,76 +44,42 @@ const ItemList = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Appbar.Header style={styles.appBar}>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+    <View style={globalStyles.container}>
+      <View style={[screenStyles.headerWave, itemListStyles.header]}>
+        <Pressable onPress={() => navigation.goBack()} style={itemListStyles.iconContainer}>
+          <Text style={itemListStyles.backButton}>🔙</Text>
+        </Pressable>
         {searchVisible ? (
-          <Searchbar
+          <TextInput
             placeholder="Buscar"
             onChangeText={setSearchQuery}
             value={searchQuery}
             autoFocus={true}
-            style={styles.searchBar}
-            iconColor="#fff"
-            inputStyle={styles.searchInput}
+            style={itemListStyles.searchBar}
+            placeholderTextColor="#fff"
           />
         ) : (
-          <Appbar.Content title="Artículos" titleStyle={styles.appBarTitle} />
+          <Text style={globalStyles.headerText}>Lista de artículos</Text>
         )}
-        <Appbar.Action icon="magnify" onPress={_handleSearch} color="#fff" />
-      </Appbar.Header>
+        <Pressable onPress={_handleSearch} style={itemListStyles.iconContainer}>
+          <Text style={itemListStyles.searchIcon}>🔍</Text>
+        </Pressable>
+      </View>
+      <Pressable 
+        style={itemListStyles.offersButton} 
+        onPress={() => navigation.navigate('Offers')}
+      >
+        <Text style={itemListStyles.offersButtonText}>Ver Ofertas</Text>
+      </Pressable>
+
       <FlatList
         data={filteredItems}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContent}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={itemListStyles.listContent}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3e5f5',
-  },
-  appBar: {
-    backgroundColor: '#6a1b9a',
-  },
-  appBarTitle: {
-    color: '#fff',
-  },
-  searchBar: {
-    flex: 1,
-    backgroundColor: '#7b1fa2',
-    color: '#fff',
-  },
-  searchInput: {
-    color: '#fff',
-  },
-  listItem: {
-    backgroundColor: '#fff',
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 8,
-    elevation: 3,
-  },
-  itemTitle: {
-    color: '#4a148c',
-    fontWeight: 'bold',
-  },
-  itemDescription: {
-    color: '#7b1fa2',
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 8,
-    marginRight: 16,
-  },
-  listContent: {
-    paddingBottom: 16,
-  },
-});
 
 export default ItemList;

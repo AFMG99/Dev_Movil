@@ -1,68 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text, Pressable, Animated } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ItemCategories from './ItemCategories';
 import ItemList from './ItemList';
 import ItemDetails from './ItemDetails';
 import PQR from './PQR';
 import Profile from './Profile';
-import ShoppingCart from './ShoppingCart';
 import Favorites from './Favorites';
 import PaymentBranch from './PaymentBranch';
 import Purchases from './Purchases';
+import ShoppingCart from './ShoppingCart';
+import mainStyles from '../styles/mainStyles';
+import Offers from './Offers';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 
 const Home = () => {
   return (
     <Stack.Navigator initialRouteName="ItemCategories">
       <Stack.Screen name="ItemCategories" component={ItemCategories} options={{ headerShown: false }} />
-      <Stack.Screen name="ItemList" component={ItemList} options={{ headerShown: false }}/>
-      <Stack.Screen name="ItemDetails" component={ItemDetails} options={{ headerShown: false }}/>
-      <Stack.Screen name="PaymentBranch" component={PaymentBranch} />
+      <Stack.Screen name="ItemList" component={ItemList} options={{ headerShown: false }} />
+      <Stack.Screen name="ItemDetails" component={ItemDetails} options={{ headerShown: false }} />
+      <Stack.Screen name="PaymentBranch" component={PaymentBranch} options={{ headerShown: false}}/>
+      <Stack.Screen name="ShoppingCart" component={ShoppingCart} options={{ headerShown: false}}/>
+      <Stack.Screen name="Offers" component={Offers} options={{ headerShown: false}}/>
+      <Stack.Screen name="Purchases" component={Purchases} options={{ headerShown: false}}/>
     </Stack.Navigator>
   );
 };
 
 const BottomTabNavigator = () => {
+  const [index, setIndex] = useState(0);
+
+  const renderFooter = () => {
+    return (
+      <View style={mainStyles.footer}>
+        {routes.map((route, routeIndex) => {
+          const isSelected = index === routeIndex;
+          return (
+            <Pressable key={route.key} onPress={() => setIndex(routeIndex)}>
+              <Animated.View style={[mainStyles.footerItem, isSelected && mainStyles.footerItemSelected]}>
+                <Text style={[mainStyles.footerText, isSelected && mainStyles.footerTextSelected]}>
+                  {route.title}
+                </Text>
+              </Animated.View>
+            </Pressable>
+          );
+        })}
+      </View>
+    );
+  };
+
+  const renderContent = () => {
+    switch (routes[index].key) {
+      case 'home':
+        return <Home />;
+      case 'pqr':
+        return <PQR />;
+      case 'profile':
+        return <Profile />;
+      case 'favorites':
+        return <Favorites />;
+      case 'shoppingCart':
+        return <ShoppingCart/>;
+      case 'offers':
+        return <Offers/>;
+      case 'purchases':
+        return <Purchases/>;
+      default:
+        return <ItemCategories />;
+    }
+  };
+
+  const routes = [
+    { key: 'home', title: '🏠\nHome' },
+    { key: 'pqr', title: '🗣️\nPQR' },
+    { key: 'favorites', title: '❤️\nFavoritos' },
+    { key: 'shoppingCart', title: '🛒\nCarrito' },
+    { key: 'profile', title: '👤\nPerfil' },
+    { key: 'purchases', title: '📦\nCompras' },
+  ];
+
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          switch (route.name) {
-            case 'Home':
-              iconName = 'home';
-              break;
-            case 'PQR':
-              iconName = 'help-circle';
-              break;
-            case 'ShoppingCart':
-              iconName = 'cart';
-              break;
-            case 'Profile':
-              iconName = 'account';
-              break;
-            case 'Favorites':
-              iconName = 'heart';
-              break;
-            default:
-              iconName = 'home';
-              break;
-          }
-          return <Icon name={iconName} size={size} color={color} />;
-        },
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen name="PQR" component={PQR} />
-      <Tab.Screen name="ShoppingCart" component={ShoppingCart} />
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="Favorites" component={Favorites} />
-    </Tab.Navigator>
+    <View style={mainStyles.container}>
+      <View style={mainStyles.content}>
+        {renderContent()}
+      </View>
+      {renderFooter()}
+    </View>
   );
 };
 
@@ -70,10 +95,12 @@ const Main = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="BottomTabs" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="Purchases" component={Purchases} />
-      <Stack.Screen name="ItemCategories" component={ItemCategories} />
       <Stack.Screen name="ItemList" component={ItemList} />
       <Stack.Screen name="ItemDetails" component={ItemDetails} />
+      <Stack.Screen name="PaymentBranch" component={PaymentBranch} />
+      <Stack.Screen name="Purchases" component={Purchases} />
+      <Stack.Screen name="ShoppingCart" component={ShoppingCart} />
+      <Stack.Screen name="Offers" component={Offers} />
     </Stack.Navigator>
   );
 };

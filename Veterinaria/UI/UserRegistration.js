@@ -147,7 +147,7 @@ const UserRegistration = ({ navigation }) => {
                         onChangeText={setPassword}
                         placeholder="Contraseña"
                         secureTextEntry={true}
-                        maxLength={8}
+                    /*    maxLength={8}; ; la profesora no nos va a cobrar la validacion de max 8 caracteres en la contraseña*/
                         error={!!passwordError}
                     />
                     {!!passwordError && <Text style={globalStyles.errorText}>{passwordError}</Text>}

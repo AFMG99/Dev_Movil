@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Text, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Alert, ScrollView, Pressable } from 'react-native';
 import { List, Snackbar } from "react-native-paper";
+import globalStyles from '../styles/globalStyles';
+import screenStyles from '../styles/screenStyles';
+import PQRStyles from '../styles/PQRStyles';
 
 const PQR = () => {
     const [requestType, setRequestType] = useState('');
@@ -14,87 +17,81 @@ const PQR = () => {
         if (requestType && description.length <= 300) {
             setVisible(true);
         } else {
-            alert('Por favor, completa todos los campos correctamente.');
+            Alert.alert('Error', 'Por favor, completa todos los campos correctamente.');
         }
     };
 
     const handlePress = () => setExpanded(!expanded);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Tipo de solicitud:</Text>
+        <View style={globalStyles.container}>
+            <View style={screenStyles.headerWave}>
+                <Text style={globalStyles.headerText}>PQR</Text>
+            </View>
+            <ScrollView contentContainerStyle={PQRStyles.scrollContainer}>
+                <View style={PQRStyles.container}>
 
-            <List.Accordion
-                title={requestType || "Selecciona una opción"}
-                expanded={expanded}
-                onPress={handlePress}
-            >
-                <List.Item 
-                    title="Queja" 
-                    onPress={() => {
-                        setRequestType('Queja');
-                        setExpanded(false);
-                    }} 
-                />
-                <List.Item 
-                    title="Petición" 
-                    onPress={() => {
-                        setRequestType('Petición');
-                        setExpanded(false);
-                    }} 
-                />
-                <List.Item 
-                    title="Recurso" 
-                    onPress={() => {
-                        setRequestType('Recurso');
-                        setExpanded(false);
-                    }} 
-                />
-            </List.Accordion>
+                    <Text style={PQRStyles.label}>Tipo de solicitud:</Text>
+                    <List.Accordion
+                        title={requestType || "Selecciona una opción"}
+                        expanded={expanded}
+                        onPress={handlePress}
+                        style={PQRStyles.accordion}
+                        titleStyle={PQRStyles.accordionTitle}
+                    >
+                        <List.Item
+                            title="Queja"
+                            onPress={() => {
+                                setRequestType('Queja');
+                                setExpanded(false);
+                            }}
+                            titleStyle={PQRStyles.listItem}
+                        />
+                        <List.Item
+                            title="Petición"
+                            onPress={() => {
+                                setRequestType('Petición');
+                                setExpanded(false);
+                            }}
+                            titleStyle={PQRStyles.listItem}
+                        />
+                        <List.Item
+                            title="Recurso"
+                            onPress={() => {
+                                setRequestType('Recurso');
+                                setExpanded(false);
+                            }}
+                            titleStyle={PQRStyles.listItem}
+                        />
+                    </List.Accordion>
 
-            <Text style={styles.label}>Descripción de la solicitud:</Text>
-            <TextInput
-                style={styles.textInput}
-                multiline
-                maxLength={300}
-                value={description}
-                onChangeText={setDescription}
-                placeholder="Escribe tu solicitud aquí..."
-            />
+                    <Text style={PQRStyles.label}>Descripción de la solicitud:</Text>
+                    <TextInput
+                        style={PQRStyles.textInput}
+                        multiline
+                        maxLength={300}
+                        value={description}
+                        onChangeText={setDescription}
+                        placeholder="Escribe tu solicitud aquí..."
+                        placeholderTextColor="#D1C4E9"
+                    />
 
-            <Button 
-                title="Enviar" 
-                onPress={handleSubmit} 
-            />
+                    <Pressable style={PQRStyles.submitButton} onPress={handleSubmit}>
+                        <Text style={PQRStyles.submitButtonText}>Enviar solicitud</Text>
+                    </Pressable>
 
-            <Snackbar
-                visible={visible}
-                onDismiss={onDismissSnackBar}
-                duration={Snackbar.DURATION_MEDIUM}
-            >
-                Solicitud enviada con éxito
-            </Snackbar>
+                    <Snackbar
+                        visible={visible}
+                        onDismiss={onDismissSnackBar}
+                        duration={Snackbar.DURATION_MEDIUM}
+                        style={PQRStyles.snackbar}
+                    >
+                        Solicitud enviada con éxito
+                    </Snackbar>
+                </View>
+            </ScrollView>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        justifyContent: 'center',
-    },
-    label: {
-        fontSize: 16,
-        marginBottom: 8,
-    },
-    textInput: {
-        height: 100,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        padding: 8,
-        marginBottom: 16,
-    },
-});
 
 export default PQR;
