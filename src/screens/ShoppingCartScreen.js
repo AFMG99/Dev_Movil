@@ -9,18 +9,27 @@ import ShoppingCart from "../components/ShoppingCart";
 const ShoppingCartScreen = ({ navigation }) => {
     const { state, dispatch } = useContext(Context);
     
-    useEffect( () => {
-        dispatch({type: 'GET_TOTAL'});
+    useEffect(() => {
+        dispatch({ type: 'GET_TOTAL' });
     }, [state.items]);
 
-    handlePayment = () => {
-        const selectedItems = state.items.filter(item => item.isSelected)
+    const handlePayment = () => {
+        const selectedItems = state.items.filter(item => item.isSelected);
         if (selectedItems.length === 0) {
-            Alert.alert('No hay productos seleccionados', 'Por favor, seleccione al menos un producto.')
-            return
+            Alert.alert('No hay productos seleccionados', 'Por favor, seleccione al menos un producto.');
+            return;
         }
-        navigation.navigate('PaymentBranch', { item: selectedItems })
-    }
+        const itemsToPass = selectedItems.map(item => ({
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            value: item.value,
+            image: item.image,
+            count: item.count 
+        }));
+
+        navigation.navigate('PaymentBranch', { items: itemsToPass });
+    };
 
     return (
         <View style={globalStyles.container}>
@@ -29,13 +38,13 @@ const ShoppingCartScreen = ({ navigation }) => {
             </View>
             <FlatList
                 data={state.items}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                     <ShoppingCart
-                        item = {item}
-                        onIncrease = {() => dispatch({type: 'INCREASE_QUANTITY', payload: item.id })}
-                        onDecrease = {() => dispatch({type: 'DECREASE_QUANTITY', payload: item.id })}
-                        onDelete = {() => dispatch({type: 'DELETE_ITEM', payload: item.id })}
-                        onSelect = {() => dispatch({type: 'SELECT_ITEM', payload: item.id })}
+                        item={item}
+                        onIncrease={() => dispatch({ type: 'INCREASE_QUANTITY', payload: item.id })}
+                        onDecrease={() => dispatch({ type: 'DECREASE_QUANTITY', payload: item.id })}
+                        onDelete={() => dispatch({ type: 'DELETE_ITEM', payload: item.id })}
+                        onSelect={() => dispatch({ type: 'SELECT_ITEM', payload: item.id })}
                     />
                 )}
                 keyExtractor={(item) => item.id.toString()}

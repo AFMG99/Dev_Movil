@@ -9,7 +9,7 @@ import db from '@react-native-firebase/firestore';
 
 const ItemDetails = ({ route }) => {
     const { itemId } = route.params;
-    const [fullItem, setFullItem] = useState('');
+    const [fullItem, setFullItem] = useState({});
     const [questions, setQuestions] = useState('');
     const [comments, setComments] = useState('');
     const [rating, setRating] = useState(0);
@@ -17,21 +17,16 @@ const ItemDetails = ({ route }) => {
     const navigation = useNavigation();
     const { dispatch } = useContext(Context);
 
-    const loadFullItem = async () => {
-        const suscriber = db().collection('items').doc(itemId).onSnapshot(itemDoc => {
-            if (itemDoc.exists) {
-                setFullItem({ id: itemDoc.id, ...itemDoc.data() });
+    useEffect(() => {
+        const subscriber = db().collection('items').doc(itemId).onSnapshot(doc => {
+            if (doc.exists) {
+                setFullItem({ id: doc.id, ...doc.data() });
             } else {
                 console.error('El documento no existe');
             }
-        }, error => {
-            console.error('Error al cargar los detalles del artículo:', error);
-        });
-        return () => suscriber();
-    };
+        }, error => console.error('Error al cargar los detalles del artículo:', error));
 
-    useEffect(() => {
-        loadFullItem();
+        return () => subscriber();
     }, [itemId]);
 
     const handleSubmitQuestion = async () => {
@@ -75,7 +70,7 @@ const ItemDetails = ({ route }) => {
         } else {
             Alert.alert('Calificación baja', 'La calificación es menor a 3.');
         }
-    };    
+    };
 
     return (
         <View style={ItemDetailsStyles.container}>
@@ -88,7 +83,6 @@ const ItemDetails = ({ route }) => {
                         style={ItemDetailsStyles.cartIcon}
                         onPress={() => {
                             dispatch({ type: 'ADD_ITEM', payload: { ...fullItem, count: 1 } });
-                            console.log('Artículo agregado al carrito', fullItem.name);
                             navigation.navigate('ShoppingCartScreen');
                         }}
                     >
@@ -105,21 +99,10 @@ const ItemDetails = ({ route }) => {
                     <Text style={ItemDetailsStyles.title}>{fullItem.name}</Text>
                     <Text style={ItemDetailsStyles.description}>{fullItem.description}</Text>
                     <Text style={ItemDetailsStyles.value}>Valor: ${fullItem.value}</Text>
-                    <Text style={ItemDetailsStyles.characteristicsTitle}>Características del Producto:</Text>
-                    <Text style={ItemDetailsStyles.characteristics}>Información adicional del producto...</Text>
-
-                    <View style={ItemDetailsStyles.paymentMethodsContainer}>
-                        <Text style={ItemDetailsStyles.paymentMethodsTitle}>Medios de Pago Aceptados:</Text>
-                        <View style={ItemDetailsStyles.paymentIcons}>
-                            <Text style={ItemDetailsStyles.emoji}>💳</Text>
-                            <Text style={ItemDetailsStyles.emoji}>💸</Text>
-                            <Text style={ItemDetailsStyles.emoji}>🅿️</Text>
-                        </View>
-                    </View>
-
+                    
                     <TextInput
                         style={globalStyle.input}
-                        placeholder="Agregar una pregunta al vendedor (máximo 100 caracteres)"
+                        placeholder="Agregar una pregunta al vendedor"
                         maxLength={100}
                         value={questions}
                         onChangeText={setQuestions}
@@ -130,7 +113,7 @@ const ItemDetails = ({ route }) => {
 
                     <TextInput
                         style={globalStyle.input}
-                        placeholder="Agregar un comentario (máximo 200 caracteres)"
+                        placeholder="Agregar un comentario"
                         maxLength={200}
                         value={comments}
                         onChangeText={setComments}
@@ -147,15 +130,6 @@ const ItemDetails = ({ route }) => {
                             </Pressable>
                         ))}
                     </View>
-                    {rating > 0 && (
-                        <TextInput
-                            style={globalStyle.input}
-                            placeholder="Agregar comentario para la calificación (opcional)"
-                            maxLength={200}
-                            value={ratingComment}
-                            onChangeText={setRatingComment}
-                        />
-                    )}
                 </View>
             </ScrollView>
         </View>

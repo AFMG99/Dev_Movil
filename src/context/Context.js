@@ -43,28 +43,31 @@ const reducer = (state, action) => {
                     .reduce((total, item) => total + (item.value * item.count), 0),
             };
         case 'ADD_ITEM':
-            console.log('Payload', action.payload);
+
             return state.items.some(item => item.id === action.payload.id) ? state :
                 {
                     ...state,
                     items: [...state.items, action.payload],
                 };
-        case 'SET_FAVORITES':
-            return {
-                ...state,
-                favorites: action.payload,
-            };
-        case 'ADD_TO_FAVORITE':
+        case "ADD_TO_FAVORITE":
+            db().collection('favorites').add(action.payload)
+                .then(() => Alert.alert("Favorito agregado"))
+                .catch(() => Alert.alert("Error al agregar a favoritos"));
             return {
                 ...state,
                 favorites: [...state.favorites, action.payload],
             };
 
         case 'ADD_PURCHASES':
+            action.payload.forEach(async (product) => {
+                await db().collection('purchases').add(product)
+                    .then(() => Alert.alert("Compra realizada", "Los productos han sido registrados en tus compras."))
+                    .catch((error) => console.error("Error en la compra:", error));
+            });
             return {
                 ...state,
-                purchases: [...state.purchases, ...action.payload],
-                items: [],
+                items: state.items.map(item => ({ ...item, isSelected: false })),
+                purchases: [...state.purchases, ...action.payload]
             };
         case 'REGISTER_USER':
             const { userName, password } = action.payload;
