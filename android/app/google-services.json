@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459022558295",
+    "project_id": "appstore-78da6",
+    "storage_bucket": "appstore-78da6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459022558295:android:cd289921b3b6028886af12",
+        "android_client_info": {
+          "package_name": "com.veterinaria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvPJQA7OEOuUi1wEWO8z0BQIWwpYsbuno"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
